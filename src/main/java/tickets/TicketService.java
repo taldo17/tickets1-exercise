@@ -12,6 +12,7 @@ public class TicketService {
 
     private WindowsFileWriter windowsFileWriter = new WindowsFileWriter();
     private final int CANCELLATION_TIME_IN_WEEKS = 1;
+    public static int ordersCounter = 0;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public String placeOrder(String showName, String desiredDateStr, int numberOfTickets) {
@@ -25,6 +26,7 @@ public class TicketService {
         String reportString = generateReportString(showName, desiredDateStr, numberOfTickets, lastCancellationDate);
         windowsFileWriter.write(reportString);
         S3TicketsDao.getInstance().uploadObject(reportString);
+        ordersCounter++;
         return reportString;
 
     }
@@ -63,7 +65,6 @@ public class TicketService {
     private String formatDate(LocalDate date) {
         return date!= null ? formatter.format(date) : "None";
     }
-
 
     private boolean isMoreThanAWeek(LocalDate desiredDate, LocalDate currentDate) {
         return DAYS.between(currentDate, desiredDate) > 7;

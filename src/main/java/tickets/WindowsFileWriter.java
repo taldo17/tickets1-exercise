@@ -11,6 +11,7 @@ public class WindowsFileWriter {
 
 
     public void write(String text){
+        System.out.println("Saving report to your local disc at path: " + REPORT_PATH);
         try {
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(REPORT_PATH), "utf-8"));
             writer.write(text);
